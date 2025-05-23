@@ -1,0 +1,15 @@
+<h1>Mini-Netumo Dashboard</h1>
+
+<app-target-list (targetSelectedForDetails)="onTargetSelected($event)"></app-target-list>
+
+<div class="details-section" *ngIf="selectedTargetId">
+  <h2>Details for Target ID: {{ selectedTargetId }}</h2>
+  <div class="charts-and-history">
+    <app-uptime-chart [targetId]="selectedTargetId"></app-uptime-chart>
+    <app-alert-history [targetId]="selectedTargetId"></app-alert-history> 
+    <!-- AlertHistoryComponent will also need a targetId @Input -->
+  </div>
+</div>
+<div *ngIf="!selectedTargetId" class="no-target-selected">
+  <p>Select a target from the list above to see its details, uptime chart, and alert history.</p>
+</div>

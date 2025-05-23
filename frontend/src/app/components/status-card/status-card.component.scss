@@ -1,0 +1,49 @@
+.status-up {
+  color: green;
+  font-weight: bold;
+}
+
+.status-down {
+  color: red;
+  font-weight: bold;
+}
+
+mat-card {
+  margin-bottom: 16px;
+}
+
+.status-checking {
+  color: orange;
+  font-style: italic;
+}
+
+.status-paused {
+  color: grey;
+  font-style: italic;
+}
+
+.status-valid {
+  color: green;
+}
+
+.status-expiring-soon {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-error, .status-expired { // Grouping EXPIRED with ERROR for styling
+  color: red;
+  font-weight: bold;
+}
+
+.status-unknown, .status-na { // Grouping NA with UNKNOWN
+  color: grey;
+}
+
+.additional-info {
+  font-size: 0.9em;
+  margin-top: 8px;
+  div {
+    margin-bottom: 4px;
+  }
+}

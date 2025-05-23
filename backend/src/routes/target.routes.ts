@@ -30,4 +30,5 @@ router.route('/:targetId/alerts')
 router.route('/:targetId/uptime-summary')
   .get(getTargetUptimeSummary);
 
+  
 export default router;

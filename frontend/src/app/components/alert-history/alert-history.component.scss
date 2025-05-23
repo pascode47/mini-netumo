@@ -1,0 +1,77 @@
+.loading-indicator, .error-message, .no-alerts-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  min-height: 100px; /* Ensure some space is taken */
+}
+
+.error-message {
+  color: red;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.alert-item {
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .alert-title {
+    font-weight: bold;
+  }
+
+  .alert-status {
+    font-size: 0.9em;
+    margin-left: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+
+    &.status-active {
+      background-color: #ffebee; // Light red
+      color: #c62828; // Darker red
+    }
+    &.status-acknowledged {
+      background-color: #e3f2fd; // Light blue
+      color: #1565c0; // Darker blue
+    }
+    &.status-resolved {
+      background-color: #e8f5e9; // Light green
+      color: #2e7d32; // Darker green
+    }
+  }
+
+  .alert-message {
+    font-size: 0.95em;
+    color: #444;
+    white-space: pre-wrap; /* Preserve whitespace for multi-line messages */
+  }
+
+  .alert-timestamp {
+    font-size: 0.85em;
+    color: #777;
+  }
+
+  .alert-details {
+    font-size: 0.8em;
+    color: #555;
+    background-color: #f9f9f9;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+    white-space: pre-wrap; /* For JSON display */
+  }
+}
+
+mat-paginator {
+  margin-top: 16px;
+  background-color: transparent; /* Or match your theme */
+}

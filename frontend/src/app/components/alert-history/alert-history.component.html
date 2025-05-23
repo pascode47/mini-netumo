@@ -1,0 +1,46 @@
+<h3>Alert History <span *ngIf="targetId">- for Target</span></h3>
+
+<div *ngIf="isLoading" class="loading-indicator">
+  <p>Loading alert history...</p>
+</div>
+
+<div *ngIf="!isLoading && errorMessage" class="error-message">
+  <p>{{ errorMessage }}</p>
+</div>
+
+<div *ngIf="!isLoading && !errorMessage && alerts.length > 0">
+  <mat-list role="list">
+    <mat-list-item *ngFor="let alert of alerts" role="listitem" class="alert-item">
+      <mat-icon matListItemIcon [color]="getColorForAlert(alert)">
+        {{ getIconForAlertType(alert.type) }}
+      </mat-icon>
+      <div matListItemTitle class="alert-title">
+        {{ getTargetName(alert) }} - {{ alert.type }}
+        <span class="alert-status" [ngClass]="'status-' + alert.status.toLowerCase()">({{ alert.status }})</span>
+      </div>
+      <div matListItemLine class="alert-message">{{ alert.message }}</div>
+      <div matListItemLine class="alert-timestamp">
+        Triggered: {{ alert.triggeredAt | date:'medium' }}
+        <span *ngIf="alert.resolvedAt"> | Resolved: {{ alert.resolvedAt | date:'medium' }}</span>
+      </div>
+      <div matListItemMeta class="alert-details" *ngIf="alert.details">
+        Details: {{ alert.details | json }}
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-paginator 
+    [length]="totalAlerts"
+    [pageSize]="limit"
+    [pageSizeOptions]="[5, 10, 25]"
+    (page)="handlePageEvent($event)"
+    aria-label="Select page of alerts">
+  </mat-paginator>
+</div>
+
+<div *ngIf="!isLoading && !errorMessage && alerts.length === 0 && targetId">
+  <p>No alerts in the history for this target.</p>
+</div>
+<div *ngIf="!isLoading && !errorMessage && alerts.length === 0 && !targetId">
+  <p>Select a target to view its alert history, or no alerts recorded globally.</p>
+</div>

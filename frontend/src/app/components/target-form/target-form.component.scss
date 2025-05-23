@@ -1,0 +1,37 @@
+.target-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between form fields */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  max-width: 500px; /* Or your preferred max width */
+  margin: 20px auto; /* Center the form if used as a standalone page/section */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-checkbox {
+  margin-bottom: 10px; /* Add some space below the checkbox */
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Spacing between buttons */
+  margin-top: 20px;
+}
+
+/* Optional: Style for error messages */
+mat-error {
+  font-size: 0.85em;
+}

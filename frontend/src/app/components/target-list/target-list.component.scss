@@ -1,0 +1,64 @@
+.target-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Space between cards */
+}
+
+/* Ensure app-status-card takes up appropriate space if needed,
+   or let mat-card styling handle width. For now, this is minimal. */
+app-status-card {
+  flex: 1 1 300px; /* Flex-grow, flex-shrink, flex-basis */
+  max-width: 400px; /* Optional: prevent cards from becoming too wide */
+  position: relative; /* For positioning action buttons if needed */
+}
+
+.target-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px; /* Add some padding if container is full-width */
+}
+
+.loading-indicator, .no-targets-message {
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: #666;
+}
+
+.target-item-container {
+  position: relative; /* To position action buttons absolutely within this container */
+  display: flex; /* If you want actions next to card, or use absolute positioning */
+  flex-direction: column; /* Stack card and actions if not using absolute */
+  margin-bottom: 16px; /* If .target-cards-container doesn't have enough gap */
+}
+
+.target-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0px 8px 8px; /* Adjust as needed */
+  gap: 8px;
+  background-color: #f9f9f9; /* Optional: to match card form background */
+  border-bottom-left-radius: 4px; /* Match card radius if applicable */
+  border-bottom-right-radius: 4px;
+  margin-top: -8px; /* Pull it slightly under the card if card has padding */
+  position: relative; /* Ensure it's part of the flow or adjust if absolute */
+  z-index: 1; /* Ensure it's clickable over card shadow if any */
+
+  button {
+    min-width: 36px; // Make icon buttons a bit smaller
+    padding: 0;
+    line-height: 36px;
+  }
+}
+
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 10px;
+}
