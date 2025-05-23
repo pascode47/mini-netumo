@@ -1,0 +1,104 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" # Map host port 80 to container port 80 (Nginx default)
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env # Load environment variables from backend/.env
+    ports:
+      - "3001:3001" # Map host port 3001 to container port 3001 (as per backend Dockerfile EXPOSE)
+    environment:
+      # Variables set here will OVERRIDE those from env_file if names conflict.
+      # We need MONGO_URI and REDIS_HOST to use service discovery names.
+      MONGO_URI: mongodb://mongo:27017/mini_netumo 
+      REDIS_HOST: redis
+      # PORT and NODE_ENV can also be set here or taken from .env via env_file
+      # For clarity, let's keep them here if they are specific to the dockerized environment
+      # or differ from a local .env used for non-Docker development.
+      # If backend/.env defines PORT and NODE_ENV, they will be used unless overridden here.
+      # NODE_ENV: development # Will be taken from backend/.env if defined there
+      # PORT: 3001 # Will be taken from backend/.env if defined there
+      # REDIS_PORT: 6379 # Will be taken from backend/.env if defined there
+      # Other variables like MAIL_HOST, MAIL_USER, etc., will be loaded from backend/.env
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      # Optional: Mount local code for development (reflects changes without rebuilding image)
+      # Be cautious with this in production.
+      # - ./backend/src:/usr/src/app/src 
+      # - ./backend/dist:/usr/src/app/dist # If you want to see compiled output locally
+      # The .dockerignore should prevent node_modules from being overwritten if you mount the whole backend dir
+      # - ./backend:/usr/src/app 
+      # Ensure node_modules is handled correctly, e.g., by a named volume or by not mounting over it.
+      # A common pattern is to mount code but use a volume for node_modules:
+      # - ./backend:/usr/src/app
+      # - /usr/src/app/node_modules 
+      # This creates an anonymous volume for node_modules inside the container,
+      # preventing the host's node_modules (if any) from overwriting the container's.
+      # However, for a built image, direct mounting is often for dev only.
+      # For production, you'd rely on the image's contents.
+      [] # Empty list for no volumes
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/"] # Basic check for root endpoint
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s # Give time for app to start before first check
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest # Or a specific version like mongo:6.0
+    ports:
+      - "27017:27017" # Map host port 27017 to container port 27017
+    volumes:
+      - mongo-data:/data/db # Persist MongoDB data
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/mini_netumo --quiet # Ping MongoDB
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine # Or a specific version like redis:7.0-alpine
+    ports:
+      - "6379:6379" # Map host port 6379 to container port 6379
+    volumes:
+      - redis-data:/data # Persist Redis data
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"] # Ping Redis
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - app-network
+
+volumes:
+  mongo-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
