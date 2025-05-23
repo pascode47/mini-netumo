@@ -9,7 +9,7 @@ package-lock.json # Usually committed, but can be ignored if only package.json i
 # Backend (Node.js / TypeScript specific)
 backend/dist/
 backend/node_modules/
-# backend/.env # Temporarily allow backend/.env for deployment convenience
+backend/.env
 backend/coverage/
 backend/*.log
 backend/build_log.txt # Assuming this is a temporary build log
@@ -94,7 +94,7 @@ build/Release
 *.tsbuildinfo
 
 # Environment files (general, if not in backend/ or frontend/)
-# .env # Temporarily allow root .env if used
+.env
 # .env.local
 # .env.development.local
 .env.test.local
