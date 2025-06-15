@@ -1,64 +1,209 @@
-.target-cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px; /* Space between cards */
-}
-
-/* Ensure app-status-card takes up appropriate space if needed,
-   or let mat-card styling handle width. For now, this is minimal. */
-app-status-card {
-  flex: 1 1 300px; /* Flex-grow, flex-shrink, flex-basis */
-  max-width: 400px; /* Optional: prevent cards from becoming too wide */
-  position: relative; /* For positioning action buttons if needed */
+.target-list-container {
+  padding: 1.5rem;
+  background-color: var(--background-color);
 }
 
 .target-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 0 10px; /* Add some padding if container is full-width */
-}
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
 
-.loading-indicator, .no-targets-message {
-  text-align: center;
-  padding: 20px;
-  font-style: italic;
-  color: #666;
-}
-
-.target-item-container {
-  position: relative; /* To position action buttons absolutely within this container */
-  display: flex; /* If you want actions next to card, or use absolute positioning */
-  flex-direction: column; /* Stack card and actions if not using absolute */
-  margin-bottom: 16px; /* If .target-cards-container doesn't have enough gap */
-}
-
-.target-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0px 8px 8px; /* Adjust as needed */
-  gap: 8px;
-  background-color: #f9f9f9; /* Optional: to match card form background */
-  border-bottom-left-radius: 4px; /* Match card radius if applicable */
-  border-bottom-right-radius: 4px;
-  margin-top: -8px; /* Pull it slightly under the card if card has padding */
-  position: relative; /* Ensure it's part of the flow or adjust if absolute */
-  z-index: 1; /* Ensure it's clickable over card shadow if any */
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+  }
 
   button {
-    min-width: 36px; // Make icon buttons a bit smaller
-    padding: 0;
-    line-height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+
+  mat-spinner {
+    margin-bottom: 1rem;
+  }
+}
+
+.no-targets-message {
+  text-align: center;
+  padding: 3rem;
+  background: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  color: var(--text-secondary);
+  margin: 1rem 0;
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+}
+
+.target-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.target-item-container {
+  position: relative;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    .target-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.target-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.2s ease;
+  z-index: 2;
+
+  button {
+    background-color: var(--card-background);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 50%;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &[color="warn"]:hover {
+      background-color: rgba(244, 67, 54, 0.1);
+    }
+
+    &[color="primary"]:hover {
+      background-color: rgba(33, 150, 243, 0.1);
+    }
+  }
+}
 
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  padding: 10px;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+
+    &:hover:not([disabled]) {
+      background-color: rgba(33, 150, 243, 0.1);
+      border-color: var(--primary-color);
+    }
+
+    &[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  span {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 768px) {
+  .target-list-container {
+    padding: 1rem;
+  }
+
+  .target-list-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .target-cards-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+    padding: 0.75rem;
+
+    button {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.9rem;
+    }
+  }
 }

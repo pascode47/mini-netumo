@@ -59,7 +59,15 @@ The application consists of:
 
 All services are containerized and managed by Docker Compose, allowing for easy setup and consistent environments.
 
-## 4. Contributions by Team Members
+## 4. Deployment & Access
+
+The application is deployed and accessible via the following public IP address:
+
+-   **URL:** [http://16.171.176.110](http://16.171.176.110)
+
+Please ensure your EC2 instance's security group allows inbound traffic on port 80.
+
+## 5. Contributions by Team Members
 
 ### Paschal B. Bizulu (T21-03-08803)
 
@@ -135,6 +143,6 @@ Saitoti focused on research for specific backend modules and initial data modeli
 3.  **Environment Setup Assistance:**
     *   Assisted in setting up the local development environment and understanding `.env` configurations.
 
-## 5. Conclusion
+## 6. Conclusion
 
 The Mini-Netumo project successfully implements a comprehensive set of features for website and service monitoring. The architecture is robust, leveraging modern technologies and containerization for scalability and ease of deployment. All team members contributed to the project's development, with Paschal Bizulu playing a central role in the design, implementation, and integration of both backend and frontend systems.

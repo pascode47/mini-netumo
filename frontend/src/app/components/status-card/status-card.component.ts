@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'; // Added Output, EventEmitter
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -13,12 +13,52 @@ import { Target } from '../../models/target.model';
 })
 export class StatusCardComponent {
   @Input() target?: Target;
-  @Output() cardClicked = new EventEmitter<string>(); // Emits target ID
+  @Output() cardClicked = new EventEmitter<string>();
 
   onCardClick(): void {
     if (this.target && this.target.id) {
       this.cardClicked.emit(this.target.id);
     }
+  }
+
+  getStatusIcon(): string {
+    if (!this.target) return 'help';
+    switch (this.target.status) {
+      case 'UP':
+        return 'check_circle';
+      case 'DOWN':
+        return 'error';
+      case 'CHECKING':
+        return 'hourglass_empty';
+      case 'PAUSED':
+        return 'pause_circle';
+      default:
+        return 'help';
+    }
+  }
+
+  getStatusClass(): string {
+    if (!this.target) return '';
+    switch (this.target.status) {
+      case 'UP':
+        return 'status-up';
+      case 'DOWN':
+        return 'status-down';
+      case 'CHECKING':
+        return 'status-checking';
+      case 'PAUSED':
+        return 'status-paused';
+      default:
+        return 'status-unknown';
+    }
+  }
+
+  hasAdditionalInfo(): boolean {
+    return !!(
+      this.target &&
+      ((this.target.sslStatus && this.target.sslStatus !== 'NA' && this.target.sslStatus !== 'UNCHECKED') ||
+      (this.target.domainStatus && this.target.domainStatus !== 'NA' && this.target.domainStatus !== 'UNCHECKED'))
+    );
   }
 
   getSslDaysRemaining(): number | null {

@@ -6,6 +6,8 @@ import { StatusCardComponent } from '../status-card/status-card.component';
 import { TargetFormComponent } from '../target-form/target-form.component'; // Import the form component
 import { Target } from '../../models/target.model';
 import { ApiService } from '../../services/api.service'; // Import ApiService
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-target-list',
@@ -15,7 +17,9 @@ import { ApiService } from '../../services/api.service'; // Import ApiService
     StatusCardComponent,
     TargetFormComponent, // Add TargetFormComponent to imports
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule
   ],
   templateUrl: './target-list.component.html',
   styleUrls: ['./target-list.component.scss']

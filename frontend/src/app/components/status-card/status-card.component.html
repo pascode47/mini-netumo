@@ -6,33 +6,51 @@
     <mat-card-title>{{ target.name }}</mat-card-title>
     <mat-card-subtitle>{{ target.url }}</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
-    <p>
-      Status: <span [ngClass]="{'status-up': target.status === 'UP', 'status-down': target.status === 'DOWN', 'status-checking': target.status === 'CHECKING', 'status-paused': target.status === 'PAUSED'}">{{ target.status }}</span>
-    </p>
-    <p *ngIf="target.responseTimeMs">
-      Response Time: {{ target.responseTimeMs }} ms
-    </p>
-    <p *ngIf="target.lastCheckedAt">
-      Last Checked: {{ target.lastCheckedAt | date:'short' }}
-    </p>
 
-    <div class="additional-info">
+  <mat-card-content>
+    <div class="info-row">
+      <mat-icon>{{ getStatusIcon() }}</mat-icon>
+      Status: <span [ngClass]="getStatusClass()">{{ target.status }}</span>
+    </div>
+
+    <div class="info-row" *ngIf="target.responseTimeMs">
+      <mat-icon>speed</mat-icon>
+      Response Time: {{ target.responseTimeMs }} ms
+    </div>
+
+    <div class="info-row" *ngIf="target.lastCheckedAt">
+      <mat-icon>update</mat-icon>
+      Last Checked: {{ target.lastCheckedAt | date:'short' }}
+    </div>
+
+    <div class="additional-info" *ngIf="hasAdditionalInfo()">
       <div *ngIf="target.sslStatus && target.sslStatus !== 'NA' && target.sslStatus !== 'UNCHECKED'">
-        SSL Status: <span [ngClass]="getSslStatusClass()">{{ target.sslStatus }}</span>
-        <span *ngIf="target.sslStatus === 'VALID' || target.sslStatus === 'EXPIRING_SOON'">
-          ({{ getSslDaysRemaining() }} days remaining)
+        <mat-icon>security</mat-icon>
+        SSL Status: 
+        <span [ngClass]="getSslStatusClass()">
+          {{ target.sslStatus }}
+          <ng-container *ngIf="target.sslStatus === 'VALID' || target.sslStatus === 'EXPIRING_SOON'">
+            ({{ getSslDaysRemaining() }} days remaining)
+          </ng-container>
+          <ng-container *ngIf="target.sslStatus === 'EXPIRED'">
+            (Expired)
+          </ng-container>
         </span>
-        <span *ngIf="target.sslStatus === 'EXPIRED'"> (Expired)</span>
       </div>
+
       <div *ngIf="target.domainStatus && target.domainStatus !== 'NA' && target.domainStatus !== 'UNCHECKED'">
-        Domain Status: <span [ngClass]="getDomainStatusClass()">{{ target.domainStatus }}</span>
-        <span *ngIf="target.domainStatus === 'VALID' || target.domainStatus === 'EXPIRING_SOON'">
-          ({{ getDomainDaysRemaining() }} days remaining)
+        <mat-icon>domain</mat-icon>
+        Domain Status:
+        <span [ngClass]="getDomainStatusClass()">
+          {{ target.domainStatus }}
+          <ng-container *ngIf="target.domainStatus === 'VALID' || target.domainStatus === 'EXPIRING_SOON'">
+            ({{ getDomainDaysRemaining() }} days remaining)
+          </ng-container>
+          <ng-container *ngIf="target.domainStatus === 'EXPIRED'">
+            (Expired)
+          </ng-container>
         </span>
-        <span *ngIf="target.domainStatus === 'EXPIRED'"> (Expired)</span>
       </div>
     </div>
-    <!-- More details can be added here later -->
   </mat-card-content>
 </mat-card>

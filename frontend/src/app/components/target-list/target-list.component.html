@@ -1,48 +1,52 @@
-<div class="target-list-header">
-  <h2>Monitored Targets</h2>
-  <button mat-raised-button color="primary" (click)="openAddTargetForm()">
-    <mat-icon>add</mat-icon> Add New Target
-  </button>
-</div>
-
-<div *ngIf="isLoading" class="loading-indicator">
-  <p>Loading targets...</p> <!-- Replace with a spinner later if desired -->
-</div>
-
-<app-target-form 
-  *ngIf="showTargetForm"
-  [isEditMode]="isEditMode"
-  [targetToEdit]="currentTarget"
-  (formSubmitted)="handleFormSubmitted($event)"
-  (formCancelled)="handleFormCancelled()">
-</app-target-form>
-
-<div *ngIf="!isLoading && !showTargetForm">
-  <div *ngIf="targets.length === 0" class="no-targets-message">
-    <p>No targets configured yet. Click "Add New Target" to get started.</p>
+<div class="target-list-container">
+  <div class="target-list-header">
+    <h2>Monitored Targets</h2>
+    <button mat-raised-button color="primary" (click)="openAddTargetForm()">
+      <mat-icon>add</mat-icon> Add New Target
+    </button>
   </div>
 
-  <div class="target-cards-container" *ngIf="targets.length > 0">
-    <div *ngFor="let target of targets" class="target-item-container">
-      <app-status-card [target]="target" (cardClicked)="onCardClickedInList($event)"></app-status-card>
-      <div class="target-actions">
-        <button mat-icon-button color="primary" (click)="openEditTargetForm(target)" matTooltip="Edit Target">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="handleDeleteTarget(target.id)" matTooltip="Delete Target">
-          <mat-icon>delete</mat-icon>
-        </button>
+  <div *ngIf="isLoading" class="loading-indicator">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading targets...</p>
+  </div>
+
+  <app-target-form 
+    *ngIf="showTargetForm"
+    [isEditMode]="isEditMode"
+    [targetToEdit]="currentTarget"
+    (formSubmitted)="handleFormSubmitted($event)"
+    (formCancelled)="handleFormCancelled()">
+  </app-target-form>
+
+  <div *ngIf="!isLoading && !showTargetForm">
+    <div *ngIf="targets.length === 0" class="no-targets-message">
+      <mat-icon>info</mat-icon>
+      <p>No targets configured yet. Click "Add New Target" to get started.</p>
+    </div>
+
+    <div class="target-cards-container" *ngIf="targets.length > 0">
+      <div *ngFor="let target of targets" class="target-item-container">
+        <app-status-card [target]="target" (cardClicked)="onCardClickedInList($event)"></app-status-card>
+        <div class="target-actions">
+          <button mat-icon-button color="primary" (click)="openEditTargetForm(target)" matTooltip="Edit Target">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="handleDeleteTarget(target.id)" matTooltip="Delete Target">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="pagination-controls" *ngIf="targets.length > 0 && totalPages > 1">
-    <button mat-stroked-button (click)="prevPage()" [disabled]="currentPage === 1">
-      <mat-icon>chevron_left</mat-icon> Previous
-    </button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button mat-stroked-button (click)="nextPage()" [disabled]="currentPage === totalPages">
-      Next <mat-icon>chevron_right</mat-icon>
-    </button>
+    <div class="pagination-controls" *ngIf="targets.length > 0 && totalPages > 1">
+      <button mat-stroked-button (click)="prevPage()" [disabled]="currentPage === 1">
+        <mat-icon>chevron_left</mat-icon> Previous
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button mat-stroked-button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        Next <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
