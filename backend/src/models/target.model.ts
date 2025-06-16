@@ -1,6 +1,11 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
 /**
+ * OpenAPI/Swagger documentation for the Target model
+ * This defines the schema that will be shown in API documentation
+ * Includes both the full model (Target) and input model (TargetInput)
+ */
+/**
  * @openapi
  * components:
  *   schemas:
@@ -154,7 +159,8 @@ import { Schema, model, Document, Types } from 'mongoose';
  *         notificationWebhookUrl: "https://hooks.slack.com/services/..."
  */
 
-// Interface for Target document
+// Interface representing a Target document in MongoDB
+// This extends Mongoose's Document interface to add type safety
 export interface ITarget extends Document {
   url: string;
   name?: string; // Optional user-friendly name
@@ -186,13 +192,15 @@ export interface ITarget extends Document {
   updatedAt: Date;
 }
 
+// Mongoose schema definition for the Target model
+// This defines the structure and validation rules for documents in the targets collection
 const TargetSchema = new Schema<ITarget>(
   {
     url: {
       type: String,
       required: [true, 'Target URL is required.'],
-      unique: true,
-      trim: true,
+      unique: true, // Ensure URLs are unique in the database
+      trim: true, // Automatically trim whitespace
       // Basic URL validation (can be enhanced)
       match: [/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/, 'Please provide a valid URL.'],
     },
@@ -202,8 +210,8 @@ const TargetSchema = new Schema<ITarget>(
     },
     status: {
       type: String,
-      enum: ['UP', 'DOWN', 'UNKNOWN', 'CHECKING', 'PAUSED'],
-      default: 'UNKNOWN',
+      enum: ['UP', 'DOWN', 'UNKNOWN', 'CHECKING', 'PAUSED'], // Only allow these values
+      default: 'UNKNOWN', // Default status when first created
     },
     lastCheckedAt: {
       type: Date,
@@ -213,7 +221,7 @@ const TargetSchema = new Schema<ITarget>(
     },
     consecutiveFailures: {
       type: Number,
-      default: 0,
+      default: 0, // Start with 0 failures
     },
     httpStatus: {
       type: Number,
@@ -224,7 +232,7 @@ const TargetSchema = new Schema<ITarget>(
     sslStatus: {
       type: String,
       enum: ['VALID', 'EXPIRING_SOON', 'EXPIRED', 'ERROR', 'NA', 'UNCHECKED'],
-      default: 'UNCHECKED',
+      default: 'UNCHECKED', // Default status before first SSL check
     },
     sslExpiresAt: {
       type: Date,
@@ -235,7 +243,7 @@ const TargetSchema = new Schema<ITarget>(
     domainStatus: {
       type: String,
       enum: ['VALID', 'EXPIRING_SOON', 'EXPIRED', 'ERROR', 'NA', 'UNCHECKED'],
-      default: 'UNCHECKED',
+      default: 'UNCHECKED', // Default status before first domain check
     },
     domainExpiresAt: {
       type: Date,
@@ -245,12 +253,12 @@ const TargetSchema = new Schema<ITarget>(
     },
     isActive: {
       type: Boolean,
-      default: true,
+      default: true, // Monitoring is active by default
     },
     checkIntervalMinutes: {
       type: Number,
-      default: () => parseInt(process.env.DEFAULT_MONITORING_INTERVAL_MINUTES || '5', 10),
-      min: [1, 'Check interval must be at least 1 minute.'],
+      default: () => parseInt(process.env.DEFAULT_MONITORING_INTERVAL_MINUTES || '5', 10), // Use env var or default to 5
+      min: [1, 'Check interval must be at least 1 minute.'], // Minimum check interval
     },
     notificationEmail: {
       type: String,
@@ -269,20 +277,21 @@ const TargetSchema = new Schema<ITarget>(
     },
   },
   {
+    // Schema options
     timestamps: true, // Automatically adds createdAt and updatedAt fields
     toJSON: {
-      virtuals: true,
+      virtuals: true, // Include virtuals when converting to JSON
       transform: (doc, ret) => {
-        delete ret.__v; // Remove __v field
+        delete ret.__v; // Remove version key (__v) from output
         // ret.id = ret._id; // Optionally transform _id to id
         // delete ret._id;
         return ret;
       },
     },
     toObject: {
-      virtuals: true,
+      virtuals: true, // Include virtuals when converting to plain object
        transform: (doc, ret) => {
-        delete ret.__v;
+        delete ret.__v; // Remove version key (__v) from output
         // ret.id = ret._id;
         // delete ret._id;
         return ret;
@@ -291,12 +300,14 @@ const TargetSchema = new Schema<ITarget>(
   }
 );
 
-// Indexing for frequently queried fields
-TargetSchema.index({ url: 1 });
-TargetSchema.index({ status: 1 });
-TargetSchema.index({ isActive: 1 });
-TargetSchema.index({ lastCheckedAt: -1 });
+// Create indexes for frequently queried fields to improve query performance
+TargetSchema.index({ url: 1 }); // Index for URL field (ascending)
+TargetSchema.index({ status: 1 }); // Index for status field
+TargetSchema.index({ isActive: 1 }); // Index for isActive field
+TargetSchema.index({ lastCheckedAt: -1 }); // Index for lastCheckedAt (descending)
 
+// Create the Mongoose model from the schema
 const TargetModel = model<ITarget>('Target', TargetSchema);
 
+// Export the model for use in other parts of the application
 export default TargetModel;

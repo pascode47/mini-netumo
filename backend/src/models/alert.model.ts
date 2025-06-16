@@ -69,7 +69,7 @@ import { Schema, model, Document, Types } from 'mongoose';
 
 // Interface defining the structure of an Alert document in MongoDB
 export interface IAlert extends Document {
-  target: Types.ObjectId; // Reference to the Target being alerted for
+  target: Types.ObjectId; 
   type: 'DOWNTIME' | 'SSL_EXPIRY' | 'DOMAIN_EXPIRY' | 'RECOVERY'; // Type of alert
   message: string; // Detailed message about the alert
   status: 'ACTIVE' | 'ACKNOWLEDGED' | 'RESOLVED'; // Current status of the alert
@@ -82,7 +82,6 @@ export interface IAlert extends Document {
 // Mongoose schema definition for the Alert model
 const AlertSchema = new Schema<IAlert>(
   {
-    // Reference to the Target model
     target: {
       type: Schema.Types.ObjectId,
       ref: 'Target', // References the Target collection
@@ -98,14 +97,14 @@ const AlertSchema = new Schema<IAlert>(
     // Alert message
     message: {
       type: String,
-      required: true, // This field is mandatory
+      required: true, 
     },
     // Current status of the alert
     status: {
       type: String,
       enum: ['ACTIVE', 'ACKNOWLEDGED', 'RESOLVED'], // Only these values allowed
       default: 'ACTIVE', // Default value if not provided
-      index: true, // Create an index for faster queries
+      index: true, 
     },
     // When the alert was triggered
     triggeredAt: {
@@ -131,7 +130,6 @@ const AlertSchema = new Schema<IAlert>(
   }
 );
 
-// Create and export the Mongoose model based on the schema
 const AlertModel = model<IAlert>('Alert', AlertSchema);
 
 export default AlertModel;
